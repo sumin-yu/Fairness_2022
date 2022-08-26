@@ -177,8 +177,8 @@ class GenericTrainer:
 
         save_model(model.state_dict(), self.save_dir, self.log_name)
 
-        # get best model results
-        model = load_model(model, self.save_dir, self.log_name, load_best=True)
+        # get last model results
+        model = load_model(model, self.save_dir, self.log_name, load_best=False)
 
         _, eval_accs, roc_scores, eval_f1, acc_male_v, acc_female_v, male_fair_v, female_fair_v = self.evaluate(model, val_loader, self.criterion, self.cuda)
         val_acc, val_bal_acc = eval_accs
@@ -192,14 +192,15 @@ class GenericTrainer:
         test_auroc, test_fpr, test_tpr = roc_scores
         test_micro_F1, test_macro_F1 = eval_f1
 
+        # last!!!
         self._update_log(logger=logger, is_last=True,
-                         best_val_acc=val_acc, best_val_bal_acc=val_bal_acc, best_val_acc_male=acc_male_v, best_val_acc_female=acc_female_v,
-                         best_val_male_tn = male_fair_v[0], best_val_male_tp = male_fair_v[1], best_val_female_tn = female_fair_v[0], best_val_female_tp = female_fair_v[1],
-                         best_val_auroc=val_auroc, best_val_fpr=val_fpr, best_val_tpr=val_tpr,
-                         best_val_eo=val_eo, best_val_eopp=val_eopp,
-                         best_test_acc=test_acc, best_test_bal_acc=test_bal_acc, best_test_acc_male=acc_male_t, best_test_acc_female=acc_female_t,
+                         last_val_acc=val_acc, last_val_bal_acc=val_bal_acc, last_val_acc_male=acc_male_v, last_val_acc_female=acc_female_v,
+                         last_val_male_tn = male_fair_v[0], last_val_male_tp = male_fair_v[1], last_val_female_tn = female_fair_v[0], last_val_female_tp = female_fair_v[1],
+                         last_val_auroc=val_auroc, last_val_fpr=val_fpr, last_val_tpr=val_tpr,
+                         last_val_eo=val_eo, last_val_eopp=val_eopp,
+                         last_test_acc=test_acc, last_test_bal_acc=test_bal_acc, last_test_acc_male=acc_male_t, last_test_acc_female=acc_female_t,
                          test_male_tn = male_fair_t[0], test_male_tp = male_fair_t[1], test_female_tn = female_fair_t[0], test_female_tp = female_fair_t[1],
-                         best_test_auroc=test_auroc, best_test_fpr=test_fpr, best_test_tpr=test_tpr)
+                         last_test_auroc=test_auroc, last_test_fpr=test_fpr, last_test_tpr=test_tpr)
 
         print('Training Finished!')
         return model, logger

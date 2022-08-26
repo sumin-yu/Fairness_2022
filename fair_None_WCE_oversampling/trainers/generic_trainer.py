@@ -199,7 +199,7 @@ class GenericTrainer:
                          last_val_auroc=val_auroc, last_val_fpr=val_fpr, last_val_tpr=val_tpr,
                          last_val_eo=val_eo, last_val_eopp=val_eopp,
                          last_test_acc=test_acc, last_test_bal_acc=test_bal_acc, last_test_acc_male=acc_male_t, last_test_acc_female=acc_female_t,
-                         test_male_tn = male_fair_t[0], test_male_tp = male_fair_t[1], test_female_tn = female_fair_t[0], test_female_tp = female_fair_t[1],
+                         last_test_male_tn = male_fair_t[0], last_test_male_tp = male_fair_t[1], last_test_female_tn = female_fair_t[0], last_test_female_tp = female_fair_t[1],
                          last_test_auroc=test_auroc, last_test_fpr=test_fpr, last_test_tpr=test_tpr)
 
         print('Training Finished!')

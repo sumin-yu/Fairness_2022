@@ -28,6 +28,8 @@ def get_args():
                                  'SGD_momentum_decay',
                                  'Adam'],
                         help='(default=%(default)s)')
+    parser.add_argument('--scheduler', default='MultiStepLR', type=str, required=False,
+                        choices=['MultiStepLR', 'CosineAnnealingLR'])
 
     parser.add_argument('--parallel', default=False, action='store_true', help='data parallel')
     parser.add_argument('--num-workers', default=4, type=int, help='the number of thread used in dataloader')

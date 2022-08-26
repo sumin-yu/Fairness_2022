@@ -5,3 +5,6 @@
 *.sh
 *.csv
 *.ipynb
+eval.py
+analysis.py
+method_anal.py

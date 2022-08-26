@@ -123,9 +123,13 @@ def make_log_name(args):
 
     else:
         log_name += 'mri_'
-
-        log_name += 'seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}'.format(args.seed, args.subject_seed, args.epochs,
+        if args.scheduler == 'CosineAnnealingLR':
+            log_name += 'seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}_{}'.format(args.seed, args.subject_seed, args.epochs,
+                                                                          args.batch_size, args.lr, args.weight_decay, args.scheduler)
+        else: #Mul
+            log_name += 'seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}'.format(args.seed, args.subject_seed, args.epochs,
                                                                           args.batch_size, args.lr, args.weight_decay)
+
         # if args.with_mci:
         #     log_name += '_gamma{}'.format(args.gamma)
 

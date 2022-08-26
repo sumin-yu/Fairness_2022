@@ -294,7 +294,7 @@ class GenericTrainer:
                 logger = self.logger if logger is None else logger
 
                 self._update_log(logger=logger, is_last=True,
-                            acc=eval_acc.item(),
+                            acc=eval_acc.item(), bal_acc=bal_acc,
                             auroc=roc_auc, fpr=fpr, tpr=tpr)
 
             # else:

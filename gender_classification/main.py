@@ -31,11 +31,10 @@ def main():
     if args.mode == "eval":
         model_dict = torch.load(args.modelpath)
         trainer.model.load_state_dict(model_dict)
-        _, eval_acc, roc_scores, eval_f1 = trainer.evaluate(trainer.model, trainer.test_loader,
-                                                            trainer.criterion, trainer.cuda)
+        trainer.evaluate(trainer.model, trainer.test_loader, trainer.criterion, trainer.cuda)
         #_,  eval_acc, bal_acc, acc_gender, roc_scores, roc_scores_male, roc_scores_female = trainer.evaluate(trainer.model, trainer.test_loader, trainer.criterion, trainer.cuda)
 
-        auroc, fpr, tpr = roc_scores
+        # auroc, fpr, tpr = roc_scores
         # auroc_male, fpr_male, tpr_male = roc_scores_male
         # auroc_female, fpr_female, tpr_female = roc_scores_female
         # male_acc, female_acc = acc_gender
@@ -44,8 +43,9 @@ def main():
         # if args.with_mci == False:
         #     print('Acc : {:.4f}, Auroc : {:.4f}, Auroc_male : {:.4f}, Auroc_female : {:.4f}'.format(eval_acc, auroc, auroc_male, auroc_female))
         # else:
-        eval_acc_ , _ = eval_acc
-        print('Acc : {:.4f}, Auroc : {:.4f}'.format(eval_acc_, auroc))
+        # eval_acc_ , _ = eval_acc
+        # print('Acc : {:.4f}, Auroc : {:.4f}'.format(eval_acc_, auroc))
+        print('Evaluation Finished!')
 
     else:
         trainer.train(args.epochs)

@@ -46,7 +46,7 @@ for lr in [0.001]:
             for seed_a in range(model_seed):
                 for seed_b in range(data_seed):
                 
-                    log_pt = torch.load('./results/gender/mri_seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}_single_img_log.pt'.format(seed_a, seed_b, args.epochs, batch_size, lr, decay))
+                    log_pt = torch.load('./results/gender/mri_seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}_single_img_best_log.pt'.format(seed_a, seed_b, args.epochs, batch_size, lr, decay))
                     for i in log_pt:
                         if val == i:
                             best_val_acc += log_pt[i][0]

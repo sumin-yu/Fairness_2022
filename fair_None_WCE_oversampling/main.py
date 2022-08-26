@@ -27,10 +27,8 @@ def main():
 
     Modality = import_module(f'trainers.{args.data}_trainer')
     trainer = Modality.Trainer(args, log_dir, log_name, save_dir)
-    if args.mode =="kfold_train":
-        trainer.kfold_train(args.epochs)
-
-    elif args.mode == "eval":
+    
+    if args.mode == "eval":
         model_dict = torch.load(args.modelpath)
         trainer.model.load_state_dict(model_dict)
         trainer.evaluate(trainer.model, trainer.test_loader, trainer.criterion, trainer.cuda)

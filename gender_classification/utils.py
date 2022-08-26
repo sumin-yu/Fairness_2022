@@ -119,6 +119,7 @@ def make_log_name(args):
         log_name = args.modelpath.split('/')[-1]
         # remove .pt from name
         log_name = log_name[:-3]
+        log_name = 'eval_' + log_name
 
     else:
         log_name += 'mri_'

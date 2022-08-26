@@ -96,7 +96,10 @@ class GenericTrainer:
             optimizer = optim.AdamW(param_ms, lr=args.lr, weight_decay=args.weight_decay)
         else:
             optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer=optimizer, milestones=args.milestones, gamma=0.1)
+        if args.scheduler == 'CosineAnnealingLR':
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs)
+        else:
+            scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer=optimizer, milestones=args.milestones, gamma=0.1)
         return optimizer, scheduler
 
     def _update_log(self, logger, is_last=False, **kwargs):
@@ -131,7 +134,7 @@ class GenericTrainer:
             val_acc, val_bal_acc = val_accs
             val_micro_F1, val_macro_F1 = val_f1
             val_auroc, val_fpr, val_tpr = val_roc_scores
-            val_eo = abs(male_fair_v[0] - female_fair_v[0]) + abs(male_fair_v[1] - female_fair_v[1])
+            val_eo = max(abs(male_fair_v[0] - female_fair_v[0]), abs(male_fair_v[1] - female_fair_v[1]))
             val_eopp = abs(male_fair_v[1] - female_fair_v[1])
 
             test_loss, test_accs, test_roc_scores, test_f1, test_acc_male, test_acc_female, test_male_fair, test_female_fair = self.evaluate(
@@ -181,7 +184,7 @@ class GenericTrainer:
         val_acc, val_bal_acc = eval_accs
         val_auroc, val_fpr, val_tpr = roc_scores
         val_micro_F1, val_macro_F1 = eval_f1
-        val_eo = abs(male_fair_v[0] - female_fair_v[0]) + abs(male_fair_v[1] - female_fair_v[1])
+        val_eo = max(abs(male_fair_v[0] - female_fair_v[0]), abs(male_fair_v[1] - female_fair_v[1]))
         val_eopp = abs(male_fair_v[1] - female_fair_v[1])
 
         _, eval_accs, roc_scores, eval_f1, acc_male_t, acc_female_t, male_fair_t, female_fair_t = self.evaluate(model, test_loader, self.criterion, self.cuda)
@@ -399,7 +402,7 @@ class GenericTrainer:
             if self.mode == 'eval':        
                 logger = self.logger if logger is None else logger
                 
-                eo = abs(male_acc_fair[0] - female_acc_fair[0]) + abs(male_acc_fair[1] - female_acc_fair[1])
+                eo = max(abs(male_acc_fair[0] - female_acc_fair[0]), abs(male_acc_fair[1] - female_acc_fair[1]))
                 eopp = abs(male_acc_fair[1] - female_acc_fair[1])
 
                 self._update_log(logger=logger, is_last=True,

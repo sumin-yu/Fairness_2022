@@ -18,9 +18,10 @@ class MRIDataset(GenericDataset):
         aug=False
     ):
         if aug:
-            transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), RandAdjustContrast(prob=0.2), RandGaussianSmooth(prob=0.2), AddChannel(), EnsureType(), ])
+            train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), RandAdjustContrast(prob=0.2), RandGaussianSmooth(prob=0.2), AddChannel(), EnsureType()])
         else:
-            transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+            train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+        test_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
 
         # pad = Pad(3,2,0,0,3,2)
         # resample = Resample()
@@ -30,7 +31,11 @@ class MRIDataset(GenericDataset):
         # motion = RandomMotion()
         # ghosting = RandomGhosting()
         # transform = OneOf({biasfield:0.25, spike:0.25, motion:0.25, ghosting:0.25})
-        super(MRIDataset, self).__init__(mri_root=root, split=split, transform=transform, seed=seed, with_mci=with_mci)
+        if split='train':
+            super(MRIDataset, self).__init__(mri_root=root, split=split, transform=train_transform, seed=seed, with_mci=with_mci)
+        else :
+            super(MRIDataset, self).__init__(mri_root=root, split=split, transform=test_transform, seed=seed, with_mci=with_mci)
+
 
         df_train, df_val, df_test = self._split_mri_df(
             with_mci=with_mci, use_single_img=use_single_img, seed=seed

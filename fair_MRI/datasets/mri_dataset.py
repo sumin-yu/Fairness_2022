@@ -18,7 +18,7 @@ class MRIDataset(GenericDataset):
         aug=False
     ):
         if aug:
-            train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), RandAdjustContrast(prob=0.2), RandGaussianSmooth(prob=0.2), AddChannel(), EnsureType()])
+            train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), RandAdjustContrast(prob=0.4), RandGaussianSmooth(prob=0.3), AddChannel(), EnsureType()])
         else:
             train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
         test_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])

@@ -31,7 +31,7 @@ class MRIDataset(GenericDataset):
         # motion = RandomMotion()
         # ghosting = RandomGhosting()
         # transform = OneOf({biasfield:0.25, spike:0.25, motion:0.25, ghosting:0.25})
-        if split='train':
+        if split=="train":
             super(MRIDataset, self).__init__(mri_root=root, split=split, transform=train_transform, seed=seed, with_mci=with_mci)
         else :
             super(MRIDataset, self).__init__(mri_root=root, split=split, transform=test_transform, seed=seed, with_mci=with_mci)

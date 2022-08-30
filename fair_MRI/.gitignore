@@ -1,0 +1,9 @@
+/results
+/trained_models
+/data_anal
+*.txt
+*.sh
+*.csv
+*.ipynb
+.idea
+.ipynb_checkpoints

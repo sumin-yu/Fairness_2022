@@ -42,6 +42,7 @@ def get_args():
 
     parser.add_argument('--network', default='mobilenetv2', type=str, choices=['mobilenetv2','shufflenetv2','resnet10','resnet18'], help='network to train')
     parser.add_argument('--method', default='None', type=str, choices=['None','WCE','oversampling','reweighting'], help='fairness method')
+    parser.add_argument('--augmentation', default=False, action='store_true')
     args = parser.parse_args()
 
     args.cuda = not args.no_cuda and torch.cuda.is_available()

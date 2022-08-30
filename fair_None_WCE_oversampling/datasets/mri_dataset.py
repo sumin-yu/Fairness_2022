@@ -1,7 +1,8 @@
 from os.path import join
 import nibabel as nib
 
-from monai.transforms import AddChannel, Compose, ScaleIntensity, EnsureType, Pad
+from monai.transforms import Pad, AddChannel, Compose, ScaleIntensity, EnsureType, RandAdjustContrast, RandGaussianSmooth
+# from torchio.transforms import Compose, OneOf, Pad, Resample, RescaleIntensity, RandomBiasField, RandomSpike, RandomMotion, RandomGhosting
 from datasets.generic_dataset import GenericDataset
 
 
@@ -13,9 +14,22 @@ class MRIDataset(GenericDataset):
         seed=0,
         with_mci=False,
         use_single_img=False,
-        method = 'None'
+        method = 'None',
+        aug=False
     ):
-        transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+        if aug:
+            transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), RandAdjustContrast(prob=0.2), RandGaussianSmooth(prob=0.2), AddChannel(), EnsureType(), ])
+        else:
+            transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+
+        # pad = Pad(3,2,0,0,3,2)
+        # resample = Resample()
+        # scaleintensity = RescaleIntensity()
+        # biasfield = RandomBiasField()
+        # spike = RandomSpike()
+        # motion = RandomMotion()
+        # ghosting = RandomGhosting()
+        # transform = OneOf({biasfield:0.25, spike:0.25, motion:0.25, ghosting:0.25})
         super(MRIDataset, self).__init__(mri_root=root, split=split, transform=transform, seed=seed, with_mci=with_mci)
 
         df_train, df_val, df_test = self._split_mri_df(
@@ -51,11 +65,11 @@ class MRIDataset(GenericDataset):
 
         img_path = join(self.mri_root_dir, img_names, "brain_to_MNI_nonlin.nii.gz")
         img = nib.load(img_path).get_fdata()
-
+        # print(img.shape)
         if self.transform:
             img = self.transform(img)
             img = img[:, :, 6:102, :]
-        
+        # print(img.shape)
         if gender =='M' and label ==1:
             weight = self.weights_m[0]
         elif gender =='M' and label ==0:

@@ -15,13 +15,13 @@ class Trainer(GenericTrainer):
     def _get_dataset(self, args):
         mri_image_root = join(expanduser("~"), "./data/adni_registration_all/")
         train_dataset = MRIDataset(mri_image_root, split="train", seed=args.subject_seed, with_mci=args.with_mci,
-                                   use_single_img=args.use_single_img, method=args.method
+                                   use_single_img=args.use_single_img, method=args.method, aug=args.augmentation
                                    )
         val_dataset = MRIDataset(mri_image_root, split="val", seed=args.subject_seed, with_mci=args.with_mci,
-                                 use_single_img=args.use_single_img, method = args.method
+                                 use_single_img=args.use_single_img, method = args.method, aug=args.augmentation
                                  )
         test_dataset = MRIDataset(mri_image_root, split="test", seed=args.subject_seed, with_mci=args.with_mci,
-                                  use_single_img=args.use_single_img, method=args.method
+                                  use_single_img=args.use_single_img, method=args.method, aug=args.augmentation
                                   )
         return train_dataset, val_dataset, test_dataset
 

@@ -129,6 +129,8 @@ def make_log_name(args):
         else: #Mul
             log_name += 'seed{}_sub_seed{}_epochs{}_bs{}_lr{}_decay{}'.format(args.seed, args.subject_seed, args.epochs,
                                                                           args.batch_size, args.lr, args.weight_decay)
+        if args.augmentation:
+            log_name += '_aug'
 
         # if args.with_mci:
         #     log_name += '_gamma{}'.format(args.gamma)

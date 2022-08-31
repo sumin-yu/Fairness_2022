@@ -58,7 +58,7 @@ class GenericDataset(data.Dataset):
             df_test = df_test.groupby(["SubjectID"]).first().reset_index()
         
         m = len(df_train.loc[(df_train["PTGENDER"]=='M')])
-        f = len(df_train.loc[(df_train["PTGENDER"]=='M')])
+        f = len(df_train.loc[(df_train["PTGENDER"]=='F')])
         ad = len(df_train["Dx_new"]=='AD')
         cn = len(df_train["Dx_new"]=='CN')
         ad_m = len(df_train.loc[(df_train["PTGENDER"]=='M') & (df_train["Dx_new"]=='AD')])

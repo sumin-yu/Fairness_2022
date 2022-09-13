@@ -2,7 +2,7 @@ from os.path import join
 import nibabel as nib
 
 from monai.transforms import Pad, AddChannel, Compose, ScaleIntensity, EnsureType, RandAdjustContrast, RandGaussianSmooth
-# from torchio.transforms import Compose, OneOf, Pad, Resample, RescaleIntensity, RandomBiasField, RandomSpike, RandomMotion, RandomGhosting
+# from torchio.transforms import Compose, OneOf, Pad, Resize, RescaleIntensity, RandomBiasField, RandomSpike, RandomMotion, RandomGhosting
 from datasets.generic_dataset import GenericDataset
 
 
@@ -17,12 +17,14 @@ class MRIDataset(GenericDataset):
         method = 'None',
         aug=False
     ):
+        # monai augmentation
         if aug:
-            train_transform = Compose([RandAdjustContrast(prob=0.4), RandGaussianSmooth(prob=0.3), Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+            train_transform = Compose([ScaleIntensity(), RandAdjustContrast(prob=0.4), RandGaussianSmooth(prob=0.3), Pad([(3, 2), (0, 0), (3, 2)]), AddChannel(), EnsureType()])
         else:
-            train_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
-        test_transform = Compose([Pad([(3, 2), (0, 0), (3, 2)]), ScaleIntensity(), AddChannel(), EnsureType()])
+            train_transform = Compose([ScaleIntensity(), Pad([(3, 2), (0, 0), (3, 2)]), AddChannel(), EnsureType()])
+        test_transform = Compose([ScaleIntensity(), Pad([(3, 2), (0, 0), (3, 2)]), AddChannel(), EnsureType()])
 
+        # # torchio augmentation
         # pad = Pad(3,2,0,0,3,2)
         # resample = Resample()
         # scaleintensity = RescaleIntensity()
@@ -31,6 +33,9 @@ class MRIDataset(GenericDataset):
         # motion = RandomMotion()
         # ghosting = RandomGhosting()
         # transform = OneOf({biasfield:0.25, spike:0.25, motion:0.25, ghosting:0.25})
+        # if aug:
+        #     train_transform = Compose([RescaleIntensity(), RandomBiasField(), RandomSpike(), RandomGhosting(), Pad(3,2,0,0,3,2)])
+
         if split=="train":
             super(MRIDataset, self).__init__(mri_root=root, split=split, transform=train_transform, seed=seed, with_mci=with_mci, method=method)
         else :

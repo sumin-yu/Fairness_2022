@@ -337,6 +337,7 @@ class Trainer(GenericTrainer):
     def get_weight_matrix(self, extended_multipliers, target_criterion):  
         if target_criterion =='eopp': 
             w_matrix = torch.stack([1-torch.sigmoid(extended_multipliers), torch.sigmoid(extended_multipliers)]) # g by 0/1
+            w_matrix = torch.swapaxes(w_matrix, 0, 1)
         else : # eo
             w_matrix = torch.sigmoid(extended_multipliers.reshape(-1,2)) # g by F/T
         return w_matrix
